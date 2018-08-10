@@ -115,6 +115,7 @@ private_.createSandbox = function (r, o) {
     modules.blockchain.transactions.receiveTransactions(n, r)
   })
 }, private_.blockSync = function (r) {
+  app.logger.info(`sync private_.blockSync()`)
   modules.api.blocks.getHeight(function (e, t) {
     if (e) return r("Failed to get main block height: " + e);
     app.logger.info("get main block height", t);
@@ -144,8 +145,9 @@ private_.createSandbox = function (r, o) {
 }, Sync.prototype.onBind = function (e) {
   modules = e
 }, Sync.prototype.onBlockchainLoaded = function () {
+  app.logger.info(`sync onBlockchainLoaded()`)
   (0, _setImmediate3.default)(function t() {
-    library.sequence.add("Sync#blockSync", private_.blockSync(), function (e) {
+    library.sequence.add("Sync#blockSync", private_.blockSync, function (e) {
       e && app.logger.error("Sync#blockSync timer", e), setTimeout(t, 1e4)
     })
   })
